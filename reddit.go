@@ -1,22 +1,11 @@
-package main
+package reddit
 
 import (
 	"encoding/json"
 	"fmt"
 	"errors"
-	"log"
 	"net/http"
 )
-
-func main() {
-	items, err := Get("golang")
-	if err != nil {
-		log.Fatal(err)
-	}
-	for _, item := range items {
-		fmt.Println(item)
-	}
-}
 
 type Response struct {
 	Data struct {
