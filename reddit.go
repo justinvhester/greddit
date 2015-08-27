@@ -1,3 +1,4 @@
+// Package reddit implements a basic client for the Reddit API.
 package reddit
 
 import (
@@ -7,7 +8,7 @@ import (
 	"net/http"
 )
 
-type Response struct {
+type response struct {
 	Data struct {
 		Children []struct {
 			Data Item
@@ -15,12 +16,14 @@ type Response struct {
 	}
 }
 
+// Item describes a Reddit item.
 type Item struct {
 	Title    string
 	URL      string
 	Comments int `json:"num_comments"`
 }
 
+// something something String method something
 func (i Item) String() string {
 	com := ""
 	switch i.Comments {
@@ -34,6 +37,7 @@ func (i Item) String() string {
 	return fmt.Sprintf("%s%s\n%s", i.Title, com, i.URL)
 }
 
+// Get fetches the most recent items posted to the specified subreddit.
 func Get(reddit string) ([]Item, error) {
 	url := fmt.Sprintf("http://reddit.com/r/%s.json", reddit)
 	resp, err := http.Get(url)
@@ -44,7 +48,7 @@ func Get(reddit string) ([]Item, error) {
 	if resp.StatusCode != http.StatusOK {
 		return nil, errors.New(resp.Status)
 	}
-	r := new(Response)
+	r := new(response)
 	err = json.NewDecoder(resp.Body).Decode(r)
 	if err != nil {
 		return nil, err
